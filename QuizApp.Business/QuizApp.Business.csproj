@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuizApp.Data\QuizApp.Data.csproj" />
+  </ItemGroup>
+
 </Project>

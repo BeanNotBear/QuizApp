@@ -1,4 +1,5 @@
 using QuizApp.Data;
+using QuizApp.Business;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDataServices(builder.Configuration);
+builder.Services.AddBusinessService(builder.Configuration);
 
 var app = builder.Build();
 
