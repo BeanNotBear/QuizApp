@@ -3,9 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QuizApp.Data.Data;
 using QuizApp.Data.Repositories.BaseRepository;
-using QuizApp.Data.Repositories.RoleRepository;
 using QuizApp.Data.Repositories.UnitOfWork;
-using QuizApp.Data.Repositories.UserRepository;
 
 namespace QuizApp.Data
 {
@@ -20,8 +18,6 @@ namespace QuizApp.Data
 
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
-			services.AddScoped<IUserRepository, UserRepository>();
-			services.AddScoped<IRoleRepository, RoleRepository>();
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace QuizApp.Data.Models
 	{
         public Guid Id { get; set; }
 
-		public string UserId { get; set; }
+		public Guid UserId { get; set; }
         public Guid QuizId { get; set; }
         public DateTime StartedAt { get; set; }
 		public DateTime FinishedAt { get; set; }

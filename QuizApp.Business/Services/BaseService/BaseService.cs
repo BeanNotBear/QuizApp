@@ -19,43 +19,43 @@ namespace QuizApp.Business.Services.BaseService
 			this.unitOfWork = unitOfWork;
 		}
 
-		public async Task<int> AddAsync(T entity)
+		public virtual async Task<int> AddAsync(T entity)
 		{
 			unitOfWork.GenericRepository<T>().Add(entity);
 			int rowAffected = await unitOfWork.SaveChangesAsync();
 			return rowAffected;
 		}
 
-		public bool Delete(Guid id)
+		public virtual bool Delete(Guid id)
 		{
 			unitOfWork.GenericRepository<T>().Delete(id);
 			int rowAffected = unitOfWork.SaveChanges();
 			return rowAffected > 0;
 		}
 
-		public async Task<bool> DeleteAsync(Guid id)
+		public virtual async Task<bool> DeleteAsync(Guid id)
 		{
 			unitOfWork.GenericRepository<T>().Delete(id);
 			int rowAffected = await unitOfWork.SaveChangesAsync();
 			return rowAffected > 0;
 		}
 
-		public async Task<bool> DeleteAsync(T entity)
+		public virtual async Task<bool> DeleteAsync(T entity)
 		{
 			unitOfWork.GenericRepository<T>().Delete(entity);
 			int rowAffected = await unitOfWork.SaveChangesAsync();
 			return rowAffected > 0;
 		}
 
-		public async Task<IEnumerable<T>> GetAllAsync()
+		public virtual async Task<IEnumerable<T>> GetAllAsync()
 		{
 			var entities = await unitOfWork.GenericRepository<T>().GetAllAsync();
 			return entities;
 		}
 
-		public async Task<PaginatedResult<T>> GetAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "", int pageIndex = 1, int pageSize = 10)
+		public virtual async Task<PaginatedResult<T>> GetAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string includeProperties = "", int pageIndex = 1, int pageSize = 10)
 		{
-			var repository  = unitOfWork.GenericRepository<T>();
+			var repository = unitOfWork.GenericRepository<T>();
 			var query = repository.Get(filter, orderBy, includeProperties);
 			var take = pageSize;
 			var skip = (pageIndex - 1) * take;
@@ -66,13 +66,13 @@ namespace QuizApp.Business.Services.BaseService
 			return paginatedResult;
 		}
 
-		public async Task<T?> GetByIdAsync(Guid id)
+		public virtual async Task<T?> GetByIdAsync(Guid id)
 		{
 			var entity = await unitOfWork.GenericRepository<T>().GetByIdAsync(id);
 			return entity;
 		}
 
-		public async Task<bool> UpdateAsync(T entity)
+		public virtual async Task<bool> UpdateAsync(T entity)
 		{
 			unitOfWork.GenericRepository<T>().Update(entity);
 			int rowAffected = await unitOfWork.SaveChangesAsync();

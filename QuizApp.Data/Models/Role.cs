@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace QuizApp.Data.Models
 {
-	public class Role : IdentityRole
+	public class Role : IdentityRole<Guid>
 	{
 		public string Description { get; set; }
 		public bool IsActive { get; set; }
-        public ICollection<User> Users { get; set; }
-    }
+		public virtual ICollection<UserRole> UserRoles { get; set; }
+	}
 }

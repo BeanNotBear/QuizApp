@@ -9,11 +9,11 @@ using QuizApp.Data.Data;
 
 #nullable disable
 
-namespace QuizApp.Data.Data.Migrations
+namespace QuizApp.Data.Migrations
 {
     [DbContext(typeof(QuizAppDbContext))]
-    [Migration("20241021031843_Initital")]
-    partial class Initital
+    [Migration("20241024153914_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,13 +131,14 @@ namespace QuizApp.Data.Data.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("QuizQuestion");
+                    b.ToTable("QuizQuestions");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.Role", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -159,13 +160,32 @@ namespace QuizApp.Data.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5c35fe5b-cb5d-4072-9168-79f725c1f605"),
+                            ConcurrencyStamp = "a7896238-f8d6-4a2d-a4f6-c677ebae37ff",
+                            IsActive = true,
+                            Name = "ADMIN",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("f0e7b8ba-05ea-4bed-be2d-62b0802bfe7e"),
+                            ConcurrencyStamp = "aad244d5-faf5-4199-8539-dc0b07637049",
+                            IsActive = true,
+                            Name = "STUDENT",
+                            NormalizedName = "STUDENT"
+                        });
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -233,7 +253,7 @@ namespace QuizApp.Data.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.UserAnswer", b =>
@@ -261,7 +281,7 @@ namespace QuizApp.Data.Data.Migrations
 
                     b.HasIndex("UserQuizId");
 
-                    b.ToTable("UserAnswer");
+                    b.ToTable("UserAnswers");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.UserQuiz", b =>
@@ -269,8 +289,8 @@ namespace QuizApp.Data.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uniqueidentifier");
@@ -281,7 +301,7 @@ namespace QuizApp.Data.Data.Migrations
                     b.Property<DateTime>("StartedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValue(new DateTime(2024, 10, 21, 10, 18, 43, 485, DateTimeKind.Local).AddTicks(881));
+                        .HasDefaultValue(new DateTime(2024, 10, 24, 22, 39, 14, 722, DateTimeKind.Local).AddTicks(239));
 
                     b.HasKey("Id", "UserId", "QuizId");
 
@@ -289,22 +309,22 @@ namespace QuizApp.Data.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserQuiz");
+                    b.ToTable("UserQuizes");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("QuizApp.Data.Models.UserRole", b =>
                 {
-                    b.Property<string>("RolesId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UsersId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RolesId", "UsersId");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.Answer", b =>
@@ -395,19 +415,23 @@ namespace QuizApp.Data.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("QuizApp.Data.Models.UserRole", b =>
                 {
-                    b.HasOne("QuizApp.Data.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
+                    b.HasOne("QuizApp.Data.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QuizApp.Data.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
+                    b.HasOne("QuizApp.Data.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.Question", b =>
@@ -418,6 +442,16 @@ namespace QuizApp.Data.Data.Migrations
             modelBuilder.Entity("QuizApp.Data.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("QuizApp.Data.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("QuizApp.Data.Models.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.UserQuiz", b =>
