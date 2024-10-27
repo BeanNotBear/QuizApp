@@ -55,7 +55,11 @@ namespace QuizApp.Data.Repositories.BaseRepository
 
 			if (!string.IsNullOrWhiteSpace(includeProperties))
 			{
-				query.Include(includeProperties);
+				var includes = includeProperties.Split(',');
+				foreach (var include in includes)
+				{
+					query = query.Include(include);
+				}
 			}
 
 			return query;

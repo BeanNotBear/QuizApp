@@ -132,6 +132,7 @@ namespace QuizApp.Data.Data
 
 			modelBuilder.Entity<QuizQuestion>(x =>
 			{
+				// Configure composite key
 				x.HasKey(x => new
 				{
 					x.Id,
@@ -139,15 +140,15 @@ namespace QuizApp.Data.Data
 					x.QuestionId
 				});
 
+				// Configure relationship with Quiz
 				x.HasOne(x => x.Quiz)
-					.WithMany()
-					.HasPrincipalKey(x => x.Id)
+					.WithMany(q => q.QuizQuestions)
 					.HasForeignKey(x => x.QuizId)
 					.OnDelete(DeleteBehavior.NoAction);
 
+				// Configure relationship with Question
 				x.HasOne(x => x.Question)
-					.WithMany()
-					.HasPrincipalKey(x => x.Id)
+					.WithMany(q => q.QuizQuestions)
 					.HasForeignKey(x => x.QuestionId)
 					.OnDelete(DeleteBehavior.NoAction);
 			});
@@ -170,6 +171,8 @@ namespace QuizApp.Data.Data
 				.HasColumnType("bit")
 				.HasDefaultValue(true)
 				.IsRequired(true);
+
+				x.Property(x => x.Email).HasColumnType("varchar").HasMaxLength(100).IsRequired(true);
 
 				x.Ignore(x => x.DisplayName);
 			});

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizApp.Data.Data;
 
@@ -11,9 +12,10 @@ using QuizApp.Data.Data;
 namespace QuizApp.Data.Migrations
 {
     [DbContext(typeof(QuizAppDbContext))]
-    partial class QuizAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026063218_ConfigQuizQuestion2")]
+    partial class ConfigQuizQuestion2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,7 +257,7 @@ namespace QuizApp.Data.Migrations
                         new
                         {
                             Id = new Guid("5c35fe5b-cb5d-4072-9168-79f725c1f605"),
-                            ConcurrencyStamp = "b7ba6c4b-0e43-4219-b924-0d625ad5ab0b",
+                            ConcurrencyStamp = "17db6e57-856d-41d5-ab33-ce7e2f24bbfd",
                             IsActive = true,
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
@@ -263,7 +265,7 @@ namespace QuizApp.Data.Migrations
                         new
                         {
                             Id = new Guid("f0e7b8ba-05ea-4bed-be2d-62b0802bfe7e"),
-                            ConcurrencyStamp = "8083e046-4e83-47f5-a5bf-0b54f6cf2b36",
+                            ConcurrencyStamp = "05b5d27b-390d-4e41-a0c2-f0c645d2b05e",
                             IsActive = true,
                             Name = "STUDENT",
                             NormalizedName = "STUDENT"
@@ -400,7 +402,7 @@ namespace QuizApp.Data.Migrations
                     b.Property<DateTime>("StartedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValue(new DateTime(2024, 10, 26, 13, 35, 30, 739, DateTimeKind.Local).AddTicks(6514));
+                        .HasDefaultValue(new DateTime(2024, 10, 26, 13, 32, 18, 637, DateTimeKind.Local).AddTicks(9787));
 
                     b.HasKey("Id", "UserId", "QuizId");
 
@@ -478,13 +480,13 @@ namespace QuizApp.Data.Migrations
                     b.HasOne("QuizApp.Data.Models.Question", "Question")
                         .WithMany("QuizQuestions")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Data.Models.Quiz", "Quiz")
                         .WithMany("QuizQuestions")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Question");

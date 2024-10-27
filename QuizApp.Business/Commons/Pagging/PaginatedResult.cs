@@ -12,6 +12,11 @@ namespace QuizApp.Business.Commons.Pagging
 		public int TotalPages { get; private set; }
 		public T[] Items { get; set; }
 
+		public PaginatedResult()
+		{
+			Items = Array.Empty<T>();
+		}
+
 		public PaginatedResult(List<T> items, int count, int pageIndex, int pageSize)
 		{
 			PageIndex = pageIndex;

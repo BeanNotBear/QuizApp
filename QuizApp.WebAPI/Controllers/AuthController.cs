@@ -18,11 +18,29 @@ namespace QuizApp.WebAPI.Controllers
 		}
 
 		[HttpPost]
+		[Route("Register")]
 		public async Task<IActionResult> RegisterStudent([FromBody] RegisterViewModel registerViewModel)
 		{
 			var studentRole = new string[] { "Student" };
 			var isCreated = await _userService.RegisterUser(registerViewModel, studentRole);
 			return Ok(isCreated);
+		}
+
+		[HttpPost]
+		[Route("Admin/Register")]
+		public async Task<IActionResult> RegiterAdmin([FromBody] RegisterViewModel registrationViewModel)
+		{
+			var adminRole = new string[] { "Admin" };
+			var isCreated = await _userService.RegisterUser(registrationViewModel, adminRole);
+			return Ok(isCreated);
+		}
+
+		[HttpPost]
+		[Route("Login")]
+		public async Task<IActionResult> Login([FromBody] LoginViewModel loginViewModel)
+		{
+			var token = await _userService.Login(loginViewModel);
+			return Ok(token);
 		}
 	}
 }

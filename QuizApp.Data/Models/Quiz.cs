@@ -11,6 +11,6 @@ namespace QuizApp.Data.Models
 
 		[Range(1, 3600)]
 		public int Duration { get; set; }
-		public ICollection<Question> Questions { get; set; }
+		public ICollection<QuizQuestion> QuizQuestions { get; set; } = new List<QuizQuestion>();
 	}
 }

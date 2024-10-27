@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizApp.Data.Data;
 
@@ -11,9 +12,10 @@ using QuizApp.Data.Data;
 namespace QuizApp.Data.Migrations
 {
     [DbContext(typeof(QuizAppDbContext))]
-    partial class QuizAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026060702_ConfigQuizQuestion1")]
+    partial class ConfigQuizQuestion1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,11 +208,21 @@ namespace QuizApp.Data.Migrations
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("QuestionId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("QuizId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id", "QuizId", "QuestionId");
 
                     b.HasIndex("QuestionId");
 
+                    b.HasIndex("QuestionId1");
+
                     b.HasIndex("QuizId");
+
+                    b.HasIndex("QuizId1");
 
                     b.ToTable("QuizQuestions");
                 });
@@ -255,7 +267,7 @@ namespace QuizApp.Data.Migrations
                         new
                         {
                             Id = new Guid("5c35fe5b-cb5d-4072-9168-79f725c1f605"),
-                            ConcurrencyStamp = "b7ba6c4b-0e43-4219-b924-0d625ad5ab0b",
+                            ConcurrencyStamp = "d49ce17e-fa96-4872-8cf9-10bdb0bcbcae",
                             IsActive = true,
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
@@ -263,7 +275,7 @@ namespace QuizApp.Data.Migrations
                         new
                         {
                             Id = new Guid("f0e7b8ba-05ea-4bed-be2d-62b0802bfe7e"),
-                            ConcurrencyStamp = "8083e046-4e83-47f5-a5bf-0b54f6cf2b36",
+                            ConcurrencyStamp = "5631eccb-743d-420f-b3fe-b1912d0de716",
                             IsActive = true,
                             Name = "STUDENT",
                             NormalizedName = "STUDENT"
@@ -400,7 +412,7 @@ namespace QuizApp.Data.Migrations
                     b.Property<DateTime>("StartedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValue(new DateTime(2024, 10, 26, 13, 35, 30, 739, DateTimeKind.Local).AddTicks(6514));
+                        .HasDefaultValue(new DateTime(2024, 10, 26, 13, 7, 1, 941, DateTimeKind.Local).AddTicks(7162));
 
                     b.HasKey("Id", "UserId", "QuizId");
 
@@ -476,16 +488,24 @@ namespace QuizApp.Data.Migrations
             modelBuilder.Entity("QuizApp.Data.Models.QuizQuestion", b =>
                 {
                     b.HasOne("QuizApp.Data.Models.Question", "Question")
-                        .WithMany("QuizQuestions")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("QuizApp.Data.Models.Quiz", "Quiz")
+                    b.HasOne("QuizApp.Data.Models.Question", null)
                         .WithMany("QuizQuestions")
+                        .HasForeignKey("QuestionId1");
+
+                    b.HasOne("QuizApp.Data.Models.Quiz", "Quiz")
+                        .WithMany()
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("QuizApp.Data.Models.Quiz", null)
+                        .WithMany("QuizQuestions")
+                        .HasForeignKey("QuizId1");
 
                     b.Navigation("Question");
 

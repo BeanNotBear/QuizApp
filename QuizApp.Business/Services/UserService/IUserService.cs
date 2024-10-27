@@ -6,7 +6,7 @@ namespace QuizApp.Business.Services.UserService
 {
 	public interface IUserService : IBaseService<User>
 	{
-		Task<User> FindByUsernameAndPassword(string username, string password);
+		Task<TokenResponse> Login(LoginViewModel loginViewModel);
 		Task<bool> RegisterUser(RegisterViewModel registerViewModel, string[] roles);
 	}
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizApp.Data.Data;
 
@@ -11,9 +12,10 @@ using QuizApp.Data.Data;
 namespace QuizApp.Data.Migrations
 {
     [DbContext(typeof(QuizAppDbContext))]
-    partial class QuizAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241025020059_requireEmail")]
+    partial class requireEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,7 +164,12 @@ namespace QuizApp.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
 
                     b.ToTable("Questions");
                 });
@@ -255,7 +262,7 @@ namespace QuizApp.Data.Migrations
                         new
                         {
                             Id = new Guid("5c35fe5b-cb5d-4072-9168-79f725c1f605"),
-                            ConcurrencyStamp = "b7ba6c4b-0e43-4219-b924-0d625ad5ab0b",
+                            ConcurrencyStamp = "9b6fa38d-4609-442e-ba5d-4ea0078aa833",
                             IsActive = true,
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
@@ -263,7 +270,7 @@ namespace QuizApp.Data.Migrations
                         new
                         {
                             Id = new Guid("f0e7b8ba-05ea-4bed-be2d-62b0802bfe7e"),
-                            ConcurrencyStamp = "8083e046-4e83-47f5-a5bf-0b54f6cf2b36",
+                            ConcurrencyStamp = "150791d2-8a42-4d2c-ab92-1ac3f4c7ee9e",
                             IsActive = true,
                             Name = "STUDENT",
                             NormalizedName = "STUDENT"
@@ -400,7 +407,7 @@ namespace QuizApp.Data.Migrations
                     b.Property<DateTime>("StartedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasDefaultValue(new DateTime(2024, 10, 26, 13, 35, 30, 739, DateTimeKind.Local).AddTicks(6514));
+                        .HasDefaultValue(new DateTime(2024, 10, 25, 9, 0, 59, 328, DateTimeKind.Local).AddTicks(1926));
 
                     b.HasKey("Id", "UserId", "QuizId");
 
@@ -473,16 +480,27 @@ namespace QuizApp.Data.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("QuizApp.Data.Models.Question", b =>
+                {
+                    b.HasOne("QuizApp.Data.Models.Quiz", "Quiz")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+                });
+
             modelBuilder.Entity("QuizApp.Data.Models.QuizQuestion", b =>
                 {
                     b.HasOne("QuizApp.Data.Models.Question", "Question")
-                        .WithMany("QuizQuestions")
+                        .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Data.Models.Quiz", "Quiz")
-                        .WithMany("QuizQuestions")
+                        .WithMany()
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -561,13 +579,11 @@ namespace QuizApp.Data.Migrations
             modelBuilder.Entity("QuizApp.Data.Models.Question", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("QuizQuestions");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.Quiz", b =>
                 {
-                    b.Navigation("QuizQuestions");
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("QuizApp.Data.Models.Role", b =>
