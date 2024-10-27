@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using QuizApp.Business.Commons.Pagging;
 using QuizApp.Business.Commons.ViewModels;
+using QuizApp.Business.Commons.ViewModels.QuestionViewModel;
 using QuizApp.Business.Commons.ViewModels.QuizViewModel;
 using QuizApp.Data.Models;
 using System;
@@ -20,6 +21,12 @@ namespace QuizApp.Business.Mappers
 			CreateMap<PaginatedResult<QuizViewModel>, PaginatedResult<Quiz>>().ReverseMap();
 			CreateMap<AddQuizViewModel, Quiz>().ReverseMap();
 			CreateMap<UpdateQuizViewModel, Quiz>().ReverseMap();
+
+			// for question
+			CreateMap<QuestionViewModel, Question>().ReverseMap();
+			CreateMap<PaginatedResult<QuestionViewModel>, PaginatedResult<Question>>().ReverseMap();
+			CreateMap<AddQuestionViewModel, Question>().ReverseMap();
+			CreateMap<UpdateQuestionViewModel, Question>().ReverseMap();
 		}
 	}
 }

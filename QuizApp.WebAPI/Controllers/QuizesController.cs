@@ -26,7 +26,7 @@ namespace QuizApp.WebAPI.Controllers
 		}
 
 		[HttpGet]
-		//[Authorize]
+		[Authorize]
 		public async Task<IActionResult> GetAll()
 		{
 			var quizes = await _quizService.GetAllAsync();
@@ -36,7 +36,7 @@ namespace QuizApp.WebAPI.Controllers
 
 		[HttpGet]
 		[Route("spec")]
-		//[Authorize]
+		[Authorize]
 		public async Task<IActionResult> GetItems([FromQuery] QuizSpecParam quizSpecParam)
 		{
 			Expression<Func<Quiz, bool>> filter = q => (
@@ -66,6 +66,7 @@ namespace QuizApp.WebAPI.Controllers
 
 		[HttpGet]
 		[Route("{id:guid}")]
+		[Authorize]
 		public async Task<IActionResult> GetById([FromRoute] Guid id)
 		{
 			var quiz = await _quizService.GetByIdAsync(id);
@@ -81,6 +82,7 @@ namespace QuizApp.WebAPI.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> AddQuiz([FromBody] AddQuizViewModel addQuizViewModel)
 		{
 			var quiz = _mapper.Map<Quiz>(addQuizViewModel);
@@ -90,6 +92,7 @@ namespace QuizApp.WebAPI.Controllers
 
 		[HttpPut]
 		[Route("{id:guid}")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateQuiz([FromRoute] Guid id, [FromBody] UpdateQuizViewModel updateQuizViewModel)
 		{
 			var quiz = _mapper.Map<Quiz>(updateQuizViewModel);
@@ -100,6 +103,7 @@ namespace QuizApp.WebAPI.Controllers
 
 		[HttpDelete]
 		[Route("{id:guid}")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeleteQuiz([FromRoute] Guid id)
 		{
 			var isDeleted = await _quizService.DeleteAsync(id);

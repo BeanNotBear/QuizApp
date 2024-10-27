@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QuizApp.Business.Mappers;
+using QuizApp.Business.Services.AnswerService;
 using QuizApp.Business.Services.BaseService;
+using QuizApp.Business.Services.QuestionService;
 using QuizApp.Business.Services.QuizService;
 using QuizApp.Business.Services.UserService;
 using QuizApp.Data.Data;
@@ -31,6 +33,8 @@ namespace QuizApp.Business
 			services.AddAutoMapper(typeof(MapperProfile));
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IQuizService, QuizService>();
+			services.AddScoped<IQuestionService, QuestionService>();
+			services.AddScoped<IAnswerService, AnswerService>();
 		}
 	}
 }
